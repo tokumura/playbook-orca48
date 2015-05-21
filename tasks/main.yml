@@ -1,0 +1,39 @@
+---
+# tasks file for tokumura-orca48
+---
+- hosts: 127.0.0.1
+  user: vagrant
+  gather_facts: false
+  tasks:
+    - name: "git"
+      apt: pkg=git
+      sudo: yes
+    - name: "wget"
+      apt: pkg=wget
+      sudo: yes
+    - action: command wget -q "https://ftp.orca.med.or.jp/pub/ubuntu/archive.key"
+      sudo: yes
+    - action: command apt-key add archive.key
+      sudo: yes
+    - action: command wget -q -O /etc/apt/sources.list.d/jma-receipt-trusty48.list "https://ftp.orca.med.or.jp/pub/ubuntu/jma-receipt-trusty48.list"
+      sudo: yes
+    - name: "apt-get update"
+      apt: update_cache=yes
+      sudo: yes
+    - name: "apt-get dist-upgrade"
+      apt: upgrade=full
+      sudo: yes
+    - name: "apt-get install jma-receipt"
+      apt: pkg=jma-receipt
+      sudo: yes
+    - action: command wget "https://ftp.orca.med.or.jp/pub/data/receipt/outline/update/claim_update.tar.gz"
+    - name: "tar xzvf"
+      unarchive: src=/home/vagrant/claim_update.tar.gz dest=/home/vagrant
+    - shell: /bin/bash claim_update.sh
+      sudo: yes
+    - shell: jma-setup
+      sudo: yes
+#    - shell: /usr/lib/jma-receipt/bin/passwd_store.sh --stdin ormaster123
+#      sudo: yes
+#      sudo_user: orca
+
