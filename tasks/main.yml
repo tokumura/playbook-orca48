@@ -27,6 +27,8 @@
       sudo: yes
     - shell: jma-setup
       sudo: yes
+    - shell: service jma-receipt start
+      sudo: yes
 #    - shell: /usr/lib/jma-receipt/bin/passwd_store.sh --stdin ormaster123
 #      sudo: yes
 #      sudo_user: orca
